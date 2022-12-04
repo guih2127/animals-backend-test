@@ -1,10 +1,13 @@
-﻿namespace ShelterBuddy.CodePuzzle.Api.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
+namespace ShelterBuddy.CodePuzzle.Api.Models;
 
 public class AnimalModel
 {
     public string? Id { get; init; }
     public string? Name { get; init; }
-    public string? Colour { get; init; }
+    public string? Color { get; init; }
     public string? MicrochipNumber { get; init; }
     public string? Species { get; set; }
     public DateTime? DateOfBirth { get; init; }

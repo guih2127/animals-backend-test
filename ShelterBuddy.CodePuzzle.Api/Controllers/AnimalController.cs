@@ -1,8 +1,8 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ShelterBuddy.CodePuzzle.Api.Extensions;
+using ShelterBuddy.CodePuzzle.Api.Mapping;
 using ShelterBuddy.CodePuzzle.Api.Models;
-using ShelterBuddy.CodePuzzle.Api.Services;
+using ShelterBuddy.CodePuzzle.Core.DataAccess;
 using ShelterBuddy.CodePuzzle.Core.Entities;
 
 namespace ShelterBuddy.CodePuzzle.Api.Controllers;
@@ -11,23 +11,19 @@ namespace ShelterBuddy.CodePuzzle.Api.Controllers;
 [Route("[controller]")]
 public class AnimalController : ControllerBase
 {
-    private readonly IAnimalService _animalService;
-    private readonly IMapper _mapper;
+    private readonly IRepository<Animal, Guid> _repository;
 
-    public AnimalController(IAnimalService animalService, IMapper mapper)
+    public AnimalController(IRepository<Animal, Guid> repository)
     {
-        _animalService = animalService;
-        _mapper = mapper;
+        _repository = repository;
     }
 
 
     [HttpGet]
     public IEnumerable<AnimalModel> GetAll()
     {
-        var animals = _animalService.GetAll();
-        var models = _mapper.Map<IEnumerable<Animal>, IEnumerable<AnimalModel>>(animals);
-
-        return models;
+        var animals = _repository.GetAll();
+        return animals.Select(animal => AnimalMapping.MapEntityToModel(animal)).ToArray();
     }
 
     [HttpPost]
@@ -36,13 +32,34 @@ public class AnimalController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState.GetErrorMessages());
 
-        var animal = _mapper.Map<AnimalModel, Animal>(newAnimal);
-        var result = _animalService.Save(animal);
+        try
+        {
+            if (newAnimal.Name == null)
+                return BadRequest("An animal need to have a name.");
 
-        if (!result.Success)
-            return BadRequest(result.Message);
+            if (newAnimal.Species == null)
+                return BadRequest("An animal need to have a species.");
 
-        var animalModel = _mapper.Map<Animal, AnimalModel>(result.Animal);
-        return Ok(animalModel);
+            if (newAnimal.DateOfBirth == null &&
+                newAnimal.AgeMonths == null &&
+                newAnimal.AgeYears == null &&
+                newAnimal.AgeWeeks == null)
+            {
+                return BadRequest("Either the date of birth or the age must be informed.");
+            }
+
+            if (newAnimal.DateOfBirth > DateTime.Now)
+                return BadRequest("The Date of birth can't be in the future.");
+
+            var animalEntity = AnimalMapping.MapModelToEntity(newAnimal);
+            _repository.Add(animalEntity);
+
+            var animalModel = AnimalMapping.MapEntityToModel(animalEntity);
+            return Ok(animalModel);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"An error occurred when saving the animal: {ex.Message}");
+        }
     }
 }

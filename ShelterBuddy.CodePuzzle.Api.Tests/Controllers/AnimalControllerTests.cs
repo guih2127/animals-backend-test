@@ -1,7 +1,7 @@
-﻿using AutoMapper;
+﻿using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using ShelterBuddy.CodePuzzle.Api.Controllers;
-using ShelterBuddy.CodePuzzle.Api.Services;
+using ShelterBuddy.CodePuzzle.Api.Models;
 using ShelterBuddy.CodePuzzle.Core.DataAccess;
 using ShelterBuddy.CodePuzzle.Core.Entities;
 using Shouldly;
@@ -15,9 +15,8 @@ public class AnimalControllerTests
     [Fact]
     public void Get_WithEmptyRepository_IsEmpty()
     {
-        var service = Substitute.For<IAnimalService>();
-        var mapper = Substitute.For<IMapper>();
-        var controller = new AnimalController(service, mapper);
+        var repository = Substitute.For<IRepository<Animal, Guid>>();
+        var controller = new AnimalController(repository);
 
         controller.GetAll().ShouldBeEmpty();
     }
@@ -25,15 +24,14 @@ public class AnimalControllerTests
     [Fact]
     public void Get_WithData_ReturnsExpectedResults()
     {
-        var service = Substitute.For<IAnimalService>();
-        var mapper = Substitute.For<IMapper>();
+        var repository = Substitute.For<IRepository<Animal, Guid>>();
         var data = new Animal[]
         {
             new()
             {
                 Id = new Guid("3bb2a7e5-979a-48df-9cc3-1bc1475917e3"),
                 Name = "Fido",
-                Colour = "White",
+                Color = "White",
                 Species = "Dog",
                 DateFound = new DateTime(2019, 6, 3),
                 DateLost = new DateTime(2019, 5, 23),
@@ -51,18 +49,18 @@ public class AnimalControllerTests
                 AgeWeeks = 3,
             }
         }.AsQueryable();
-        service.GetAll().Returns(data);
-        var controller = new AnimalController(service, mapper);
+        repository.GetAll().Returns(data);
+        var controller = new AnimalController(repository);
 
         var results = controller.GetAll();
 
         results.ShouldNotBeEmpty();
         results.Count().ShouldBe(2);
-        var firstResult = results.Single(r => r.Id == "3bb2a7e5-979a-48df-9cc3-1bc147e5917e3");
+        var firstResult = results.Single(r => r.Id == "3bb2a7e5-979a-48df-9cc3-1bc1475917e3");
         var (years, months, weeks) 
             = DateTimeUtils.DateDiff(firstResult.DateOfBirth.GetValueOrDefault(), DateTime.Now);
         firstResult.Name.ShouldBe("Fido");
-        firstResult.Colour.ShouldBe("White");
+        firstResult.Color.ShouldBe("White");
         firstResult.Species.ShouldBe("Dog");
         firstResult.DateFound.ShouldBe(new DateTime(2019, 6, 3));
         firstResult.DateLost.ShouldBe(new DateTime(2019, 5, 23));
@@ -76,7 +74,7 @@ public class AnimalControllerTests
 
         var secondResult = results.Single(r => r.Id == "31d36744-2085-43f8-b443-59a93379ee01");
         secondResult.Name.ShouldBe("Spot");
-        secondResult.Colour.ShouldBeNull();
+        secondResult.Color.ShouldBeNull();
         secondResult.Species.ShouldBe("Dog");
         secondResult.DateFound.ShouldBeNull();
         secondResult.DateLost.ShouldBeNull();
@@ -87,5 +85,91 @@ public class AnimalControllerTests
         secondResult.AgeYears.ShouldBe(1);
         secondResult.AgeMonths.ShouldBe(2);
         secondResult.AgeWeeks.ShouldBe(3);
+    }
+
+    [Fact]
+    public void Post_WithEmptySpecies_DontInsert()
+    {
+        var repository = Substitute.For<IRepository<Animal, Guid>>();
+        var data = new AnimalModel
+        {
+            Name = "Fido",
+            Color = "White",
+            DateFound = new DateTime(2019, 6, 3),
+            DateLost = new DateTime(2019, 5, 23),
+            MicrochipNumber = "12345",
+            DateInShelter = new DateTime(2019, 6, 4),
+            DateOfBirth = new DateTime(2017, 3, 13),
+        };
+
+        var controller = new AnimalController(repository);
+        var result = controller.Post(data);
+
+        result.ShouldBeOfType<BadRequestObjectResult>();
+    }
+
+    [Fact]
+    public void Post_WithEmptyName_DontInsert()
+    {
+        var repository = Substitute.For<IRepository<Animal, Guid>>();
+        var data = new AnimalModel
+        {
+            Color = "White",
+            Species = "Dog",
+            DateFound = new DateTime(2019, 6, 3),
+            DateLost = new DateTime(2019, 5, 23),
+            MicrochipNumber = "12345",
+            DateInShelter = new DateTime(2019, 6, 4),
+            DateOfBirth = new DateTime(2017, 3, 13),
+        };
+
+        var controller = new AnimalController(repository);
+        var result = controller.Post(data);
+
+        result.ShouldBeOfType<BadRequestObjectResult>();
+    }
+
+    [Fact]
+    public void Post_WithFutureDateOfBirth_DontInsert()
+    {
+        var repository = Substitute.For<IRepository<Animal, Guid>>();
+        var data = new AnimalModel
+        {
+            Name = "Fido",
+            Color = "White",
+            Species = "Dog",
+            DateFound = new DateTime(2019, 6, 3),
+            DateLost = new DateTime(2019, 5, 23),
+            MicrochipNumber = "12345",
+            DateInShelter = new DateTime(2019, 6, 4),
+            DateOfBirth = new DateTime(2025, 3, 13),
+        };
+
+        var controller = new AnimalController(repository);
+        var result = controller.Post(data);
+
+        result.ShouldBeOfType<BadRequestObjectResult>();
+    }
+
+    [Fact]
+    public void Post_WithCorrectData_Inserts()
+    {
+        var repository = Substitute.For<IRepository<Animal, Guid>>();
+        var data = new AnimalModel
+        {
+            Name = "Fido",
+            Color = "White",
+            Species = "Dog",
+            DateFound = new DateTime(2019, 6, 3),
+            DateLost = new DateTime(2019, 5, 23),
+            MicrochipNumber = "12345",
+            DateInShelter = new DateTime(2019, 6, 4),
+            DateOfBirth = new DateTime(2017, 3, 13),
+        };
+
+        var controller = new AnimalController(repository);
+        var result = controller.Post(data);
+
+        result.ShouldBeOfType<OkObjectResult>();
     }
 }

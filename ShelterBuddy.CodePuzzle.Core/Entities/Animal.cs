@@ -5,7 +5,7 @@ namespace ShelterBuddy.CodePuzzle.Core.Entities;
 public class Animal : BaseEntity<Guid>
 {
     public string? Name { get; set; }
-    public string? Colour { get; set; }
+    public string? Color { get; set; }
     public string? Species { get; set; }
     public string? MicrochipNumber { get; set; }
     public DateTime? DateOfBirth { get; set; }
@@ -16,10 +16,11 @@ public class Animal : BaseEntity<Guid>
     public int? AgeMonths { get; set; }
     public int? AgeWeeks { get; set; }
 
-    public string AgeText => SetAgeText();
+    public string? AgeText => SetAgeText();
 
     public string SetAgeText()
     {
+        // TODO - Arrumar lógica com DateOfBirh
         if (DateOfBirth != null)
         {
             var (years, months, weeks) = DateTimeUtils.DateDiff(DateOfBirth.Value, DateTime.Now);
