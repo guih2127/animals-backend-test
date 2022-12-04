@@ -20,7 +20,7 @@ public class Animal : BaseEntity<Guid>
 
     public string SetAgeText()
     {
-        // TODO - Arrumar lógica com DateOfBirh
+        //TODO - Arrumar lógica com DateOfBirth
         if (DateOfBirth != null)
         {
             var (years, months, weeks) = DateTimeUtils.DateDiff(DateOfBirth.Value, DateTime.Now);

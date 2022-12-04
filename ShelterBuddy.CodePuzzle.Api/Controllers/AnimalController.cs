@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using ShelterBuddy.CodePuzzle.Api.Extensions;
 using ShelterBuddy.CodePuzzle.Api.Mapping;
 using ShelterBuddy.CodePuzzle.Api.Models;
 using ShelterBuddy.CodePuzzle.Core.DataAccess;
@@ -29,9 +28,6 @@ public class AnimalController : ControllerBase
     [HttpPost]
     public IActionResult Post([FromBody] AnimalModel newAnimal)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState.GetErrorMessages());
-
         try
         {
             if (newAnimal.Name == null)
