@@ -1,23 +1,22 @@
 # Shelter Buddy Api - Code Test
 
-Welcome to the ShelterBuddy backend developer code test.  
+This is an Animals API that can be used to query and insert pet data. In the main branch, the code just have the logic implementation and the tests. It does not have real data persistence, because the methods read data from a json file and work with it.
 
-As a backend developer at ShelterBuddy it is your job to develop the API that will be called by the front end.  Your responsibility is to complete the requirements to a level appropriate for a production ready system.
+If you want to test this API with real data, using EF Core and SQL Server, please checkout to the "back-end-test-with-entity-framework" branch.
 
-1. All tests musts pass
-2. The solution must build 
-3. All requirements should be met
+## Running the application
 
-## Requirements:
+You can run this application from Visual Studio or, using .NET CLI, typing the following commands:
 
-1. Add "Species" to animal.   
-2. Provide the ability to add a new Animal via the API.
-    1. Name is mandatory
-    2. Species is mandatory
-    3. Either Date of Birth or the Age fields (years, months, weeks) must be provided.
+```
+cd .\ShelterBuddy.CodePuzzle.Api
+```
 
-## Extra Information
+```
+dotnet run
+```
 
-* Data for the repository is located in the ShelterBuddy.CodePuzzle.Core project at /DataAccess/Data/Animals.json
-* Refer to our [coding standards](../coding-standards.md)
-* Complete your work in GitHub, Bitbucket, or Azure Devops and send us a link to your repo for review
+To access the actual API documentation, you can go to the swagger url:
+```
+http://localhost:{yourlocalhostnumber}/swagger
+```
