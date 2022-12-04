@@ -170,7 +170,6 @@ public class AnimalControllerTests
         var controller = new AnimalController(repository);
         var result = controller.Post(data);
 
-        result.ShouldBeOfType<OkObjectResult>();
-        //TODO - TESTAR OBJETO RETORNADO
+        result.ShouldBeOfType<OkObjectResult>();        
     }
 }
