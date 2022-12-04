@@ -1,23 +1,34 @@
 # Shelter Buddy Api - Code Test
 
-Welcome to the ShelterBuddy backend developer code test.  
+This is an Animals API that can be used to query and insert pet data. In this branch, there is real data manipulation, using EF Core and SQL Server to query and persist the pets data.
 
-As a backend developer at ShelterBuddy it is your job to develop the API that will be called by the front end.  Your responsibility is to complete the requirements to a level appropriate for a production ready system.
+## Running the application
 
-1. All tests musts pass
-2. The solution must build 
-3. All requirements should be met
+1. The first thing you need to do is to create a new SQL Server Database instance on your machine. After doing that, get your connection string and change the one that is located on ShelterBuddy.CodePuzzle.Api/appsettings.json.
 
-## Requirements:
+2. Now you need to use the Migrations of this project to update the database you are using, you can do it using the following command:
 
-1. Add "Species" to animal.   
-2. Provide the ability to add a new Animal via the API.
-    1. Name is mandatory
-    2. Species is mandatory
-    3. Either Date of Birth or the Age fields (years, months, weeks) must be provided.
+With Visual Studio:
+```
+Update-Database
+```
 
-## Extra Information
+With .NET CLI:
+```
+dotnet ef database update --project ShelterBuddy.CodePuzzle.Core -s ShelterBuddy.CodePuzzle.Api
+```
 
-* Data for the repository is located in the ShelterBuddy.CodePuzzle.Core project at /DataAccess/Data/Animals.json
-* Refer to our [coding standards](../coding-standards.md)
-* Complete your work in GitHub, Bitbucket, or Azure Devops and send us a link to your repo for review
+3. Now you can finally run the application. You can do using Visual Studio or, using .NET CLI, typing the following commands:
+
+```
+cd .\ShelterBuddy.CodePuzzle.Api
+```
+
+```
+dotnet run
+```
+
+To access the actual API documentation, you can go to the swagger url:
+```
+http://localhost:{yourlocalhostnumber}/swagger
+```
