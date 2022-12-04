@@ -26,7 +26,7 @@ public class AnimalController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Post([FromBody] AnimalModel newAnimal)
+    public IActionResult Post([FromBody] SaveAnimalModel newAnimal)
     {
         try
         {

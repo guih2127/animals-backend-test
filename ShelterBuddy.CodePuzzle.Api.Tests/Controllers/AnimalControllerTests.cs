@@ -91,7 +91,7 @@ public class AnimalControllerTests
     public void Post_WithEmptySpecies_DontInsert()
     {
         var repository = Substitute.For<IRepository<Animal, Guid>>();
-        var data = new AnimalModel
+        var data = new SaveAnimalModel
         {
             Name = "Fido",
             Color = "White",
@@ -112,7 +112,7 @@ public class AnimalControllerTests
     public void Post_WithEmptyName_DontInsert()
     {
         var repository = Substitute.For<IRepository<Animal, Guid>>();
-        var data = new AnimalModel
+        var data = new SaveAnimalModel
         {
             Color = "White",
             Species = "Dog",
@@ -133,7 +133,7 @@ public class AnimalControllerTests
     public void Post_WithFutureDateOfBirth_DontInsert()
     {
         var repository = Substitute.For<IRepository<Animal, Guid>>();
-        var data = new AnimalModel
+        var data = new SaveAnimalModel
         {
             Name = "Fido",
             Color = "White",
@@ -155,7 +155,7 @@ public class AnimalControllerTests
     public void Post_WithCorrectData_Inserts()
     {
         var repository = Substitute.For<IRepository<Animal, Guid>>();
-        var data = new AnimalModel
+        var data = new SaveAnimalModel
         {
             Name = "Fido",
             Color = "White",
@@ -170,6 +170,16 @@ public class AnimalControllerTests
         var controller = new AnimalController(repository);
         var result = controller.Post(data);
 
-        result.ShouldBeOfType<OkObjectResult>();        
+        var objectResponse = result.ShouldBeOfType<OkObjectResult>();
+        var insertedAnimal = objectResponse.Value.ShouldBeOfType<AnimalModel>();
+
+        insertedAnimal.Name.ShouldBe("Fido");
+        insertedAnimal.Color.ShouldBe("White");
+        insertedAnimal.Species.ShouldBe("Dog");
+        insertedAnimal.DateFound.ShouldBe(new DateTime(2019, 6, 3));
+        insertedAnimal.DateLost.ShouldBe(new DateTime(2019, 5, 23));
+        insertedAnimal.MicrochipNumber.ShouldBe("12345");
+        insertedAnimal.DateInShelter.ShouldBe(new DateTime(2019, 6, 4));
+        insertedAnimal.DateOfBirth.ShouldBe(new DateTime(2017, 3, 13));
     }
 }

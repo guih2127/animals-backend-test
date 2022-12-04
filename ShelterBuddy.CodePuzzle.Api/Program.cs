@@ -1,7 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using ShelterBuddy.CodePuzzle.Core.Contexts;
 using ShelterBuddy.CodePuzzle.Core.DataAccess;
 using ShelterBuddy.CodePuzzle.Core.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("appsettings.json", false, true);
+
+var connectionString = builder.Configuration["ConnectionStrings:Default"];
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
 // Add services to the container.
 
