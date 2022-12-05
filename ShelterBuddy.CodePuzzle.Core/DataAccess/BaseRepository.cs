@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using System.Text.Json.Nodes;
-using Newtonsoft.Json;
+﻿using ShelterBuddy.CodePuzzle.Core.Contexts;
 using ShelterBuddy.CodePuzzle.Core.Entities;
 
 namespace ShelterBuddy.CodePuzzle.Core.DataAccess;
@@ -9,49 +7,29 @@ public class BaseRepository<T, TKey> : IRepository<T, TKey>
     where T : BaseEntity<TKey>, IAuditable
     where TKey : IEquatable<TKey>
 {
-    private ICollection<T> data = new List<T>();
+    protected readonly AppDbContext _context;
     private IAuditStamper auditStamper = new AuditStamper();
-    
-    protected BaseRepository()
-    {
-    }
 
-    protected void Load(string resourceName)
+    protected BaseRepository(AppDbContext context)
     {
-        var assembly = Assembly.GetExecutingAssembly();
-        using (var stream = assembly.GetManifestResourceStream(resourceName))
-        using (var streamReader = new StreamReader(stream))
-        {
-            var animalsData = streamReader.ReadToEnd();
-            var animals = JsonConvert.DeserializeObject<T[]>(animalsData);
-
-            data.Clear();
-            foreach (var item in animals)
-            {
-                data.Add(item);
-            }
-        }
+        _context = context;
     }
 
     public T? GetEntity(TKey id) =>
-        data.FirstOrDefault(entity => entity.Id.Equals(id));
+        _context.Set<T>().Find(id);
 
-    public IQueryable<T> GetAll() => data.AsQueryable();
-
-    public void Delete(T entity)
-    {
-        entity.IsDeleted = true;
-    }
+    public IQueryable<T> GetAll() => _context.Set<T>();
 
     public void Add(T entity)
     {
-        entity.Created(auditStamper);
-        
-        data.Add(entity);
+        _context.Set<T>().Add(entity);
+        _context.SaveChanges();
     }
 
-    private void Reload()
+    public void Delete(T entity)
     {
+        _context.Set<T>().Remove(entity);
+        _context.SaveChanges();
     }
 
     private class AuditStamper : IAuditStamper

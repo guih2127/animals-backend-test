@@ -1,12 +1,24 @@
 # Shelter Buddy Api - Code Test
 
-This is an Animals API that can be used to query and insert pet data. In the main branch, the code just have the logic implementation and the tests. It does not have real data persistence, because the methods read data from a json file and work with it.
-
-If you want to test this API with real data, using EF Core and SQL Server, please checkout to the "back-end-test-with-entity-framework" branch.
+This is an Animals API that can be used to query and insert pet data. In this branch, there is real data manipulation, using EF Core and SQL Server to query and persist the pets data.
 
 ## Running the application
 
-You can run this application from Visual Studio or, using .NET CLI, typing the following commands:
+1. The first thing you need to do is to create a new SQL Server Database instance on your machine. After doing that, get your connection string and change the one that is located on ShelterBuddy.CodePuzzle.Api/appsettings.json.
+
+2. Now you need to use the Migrations of this project to update the database you are using, you can do it using the following command:
+
+With Visual Studio:
+```
+Update-Database
+```
+
+With .NET CLI:
+```
+dotnet ef database update --project ShelterBuddy.CodePuzzle.Core -s ShelterBuddy.CodePuzzle.Api
+```
+
+3. Now you can finally run the application. You can do using Visual Studio or, using .NET CLI, typing the following commands:
 
 ```
 cd .\ShelterBuddy.CodePuzzle.Api

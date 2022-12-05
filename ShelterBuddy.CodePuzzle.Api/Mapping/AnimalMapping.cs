@@ -5,7 +5,7 @@ namespace ShelterBuddy.CodePuzzle.Api.Mapping
 {
     public static class AnimalMapping
     {
-        public static Animal MapModelToEntity(AnimalModel animal)
+        public static Animal MapModelToEntity(SaveAnimalModel animal)
         {
             return new Animal
             {

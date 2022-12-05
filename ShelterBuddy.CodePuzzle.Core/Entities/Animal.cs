@@ -1,4 +1,4 @@
-﻿using ShelterBuddy.CodePuzzle.Core.Utils;
+﻿using ShelterBuddy.CodePuzzle.Utils;
 
 namespace ShelterBuddy.CodePuzzle.Core.Entities;
 
@@ -40,7 +40,7 @@ public class Animal : BaseEntity<Guid>
         }
         else if (DateOfBirth != null)
         {
-            var (years, months, weeks) = DateTimeUtils.DifferenceBetweenDates(DateTime.Now, DateOfBirth.Value);
+            var (years, months, weeks) = DateTimeUtils.CompareDates(DateTime.Now, DateOfBirth.Value);
             return $"{years} years {months} months {weeks} weeks";
         }
 

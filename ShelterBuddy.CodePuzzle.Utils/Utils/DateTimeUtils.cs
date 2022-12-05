@@ -1,8 +1,8 @@
-﻿namespace ShelterBuddy.CodePuzzle.Core.Utils
+﻿namespace ShelterBuddy.CodePuzzle.Utils
 {
     public static class DateTimeUtils
     {
-        public static (int, int, int) DifferenceBetweenDates(DateTime date1, DateTime date2)
+        public static (int, int, int) CompareDates(DateTime date1, DateTime date2)
         {
             var differenceBetweenDates = date1 - date2;
             var differenceDays = differenceBetweenDates.Days;
@@ -17,7 +17,7 @@
             notCalculatedDays -= calculatedDays;
 
             var weeks = notCalculatedDays / 7;
-
+            
             return (years, months, weeks);
         }
     }

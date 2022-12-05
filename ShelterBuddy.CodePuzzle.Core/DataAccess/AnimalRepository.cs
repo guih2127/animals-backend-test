@@ -1,11 +1,12 @@
-﻿using ShelterBuddy.CodePuzzle.Core.Entities;
+﻿using ShelterBuddy.CodePuzzle.Core.Contexts;
+using ShelterBuddy.CodePuzzle.Core.Entities;
 
 namespace ShelterBuddy.CodePuzzle.Core.DataAccess;
 
 public class AnimalRepository : BaseRepository<Animal, Guid>
 {
-    public AnimalRepository()
+    public AnimalRepository(AppDbContext context) : base(context)
     {
-        Load("ShelterBuddy.CodePuzzle.Core.DataAccess.Data.Animals.json");
+
     }
 }
