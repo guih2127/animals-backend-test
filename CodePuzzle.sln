@@ -16,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShelterBuddy.CodePuzzle.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShelterBuddy.CodePuzzle.Api.Tests", "ShelterBuddy.CodePuzzle.Api.Tests\ShelterBuddy.CodePuzzle.Api.Tests.csproj", "{848FEC08-2F0C-4FCA-A205-F99F0F2C82CA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils", "ShelterBuddy.CodePuzzle.Utils\Utils\Utils.csproj", "{9A4484D4-0ADA-45C7-9DFE-C358A8F895B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShelterBuddy.CodePuzzle.Core.Utils", "ShelterBuddy.CodePuzzle.Utils\Utils\ShelterBuddy.CodePuzzle.Core.Utils.csproj", "{9A4484D4-0ADA-45C7-9DFE-C358A8F895B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

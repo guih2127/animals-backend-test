@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ShelterBuddy.CodePuzzle.Utils\Utils\Utils.csproj" />
+      <ProjectReference Include="..\ShelterBuddy.CodePuzzle.Utils\Utils\ShelterBuddy.CodePuzzle.Core.Utils.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,39 +1,24 @@
-﻿namespace Utils
+﻿namespace ShelterBuddy.CodePuzzle.Core.Utils
 {
     public static class DateTimeUtils
     {
-        public static (int, int, int) DateDiff(DateTime dt1, DateTime dt2)
+        public static (int, int, int) DifferenceBetweenDates(DateTime date1, DateTime date2)
         {
-            DateTime zeroTime = new DateTime(1, 1, 1);
+            var differenceBetweenDates = date1 - date2;
+            var differenceDays = differenceBetweenDates.Days;
+            var notCalculatedDays = differenceDays;
 
-            int leapDaysInBetween = CountLeapDays(dt1, dt2);
+            var years = differenceDays / 365;
+            var calculatedDays = years * 365;
+            notCalculatedDays -= calculatedDays;
 
-            TimeSpan span = dt2 - dt1;
+            var months = notCalculatedDays / 30;
+            calculatedDays = months * 30;
+            notCalculatedDays -= calculatedDays;
 
-            int years = (zeroTime + span).Year - 1;
-            int months = (zeroTime + span).Month - 1;
-            int days = (zeroTime + span).Day - (leapDaysInBetween % 2 == 1 ? 1 : 0);
-            int weeks = days / 7;
+            var weeks = notCalculatedDays / 7;
 
             return (years, months, weeks);
-        }
-
-        private static int CountLeapDays(DateTime dt1, DateTime dt2)
-        {
-            int leapDaysInBetween = 0;
-            int year1 = dt1.Year, year2 = dt2.Year;
-            DateTime dateValue;
-
-            for (int i = year1; i <= year2; i++)
-            {
-                if (DateTime.TryParse("02/29/" + i.ToString(), out dateValue))
-                {
-                    if (dateValue >= dt1 && dateValue <= dt2)
-                        leapDaysInBetween++;
-                }
-            }
-
-            return leapDaysInBetween;
         }
     }
 }

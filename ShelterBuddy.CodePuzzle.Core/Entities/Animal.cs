@@ -1,4 +1,4 @@
-﻿using Utils;
+﻿using ShelterBuddy.CodePuzzle.Core.Utils;
 
 namespace ShelterBuddy.CodePuzzle.Core.Entities;
 
@@ -20,13 +20,7 @@ public class Animal : BaseEntity<Guid>
 
     public string SetAgeText()
     {
-        //TODO - Arrumar lógica com DateOfBirth
-        if (DateOfBirth != null)
-        {
-            var (years, months, weeks) = DateTimeUtils.DateDiff(DateOfBirth.Value, DateTime.Now);
-            return $"{years} years {months} months {weeks} weeks";
-        }
-        else if (AgeYears != null || AgeMonths != null || AgeWeeks != null)
+        if (AgeYears != null || AgeMonths != null || AgeWeeks != null)
         {
             var animalAge = String.Empty;
 
@@ -43,6 +37,11 @@ public class Animal : BaseEntity<Guid>
             }
 
             return animalAge;
+        }
+        else if (DateOfBirth != null)
+        {
+            var (years, months, weeks) = DateTimeUtils.DifferenceBetweenDates(DateTime.Now, DateOfBirth.Value);
+            return $"{years} years {months} months {weeks} weeks";
         }
 
         return String.Empty;

@@ -4,8 +4,8 @@ using ShelterBuddy.CodePuzzle.Api.Controllers;
 using ShelterBuddy.CodePuzzle.Api.Models;
 using ShelterBuddy.CodePuzzle.Core.DataAccess;
 using ShelterBuddy.CodePuzzle.Core.Entities;
+using ShelterBuddy.CodePuzzle.Core.Utils;
 using Shouldly;
-using Utils;
 using Xunit;
 
 namespace ShelterBuddy.CodePuzzle.Api.Tests.Controllers;
@@ -58,7 +58,7 @@ public class AnimalControllerTests
         results.Count().ShouldBe(2);
         var firstResult = results.Single(r => r.Id == "3bb2a7e5-979a-48df-9cc3-1bc1475917e3");
         var (years, months, weeks) 
-            = DateTimeUtils.DateDiff(firstResult.DateOfBirth.GetValueOrDefault(), DateTime.Now);
+            = DateTimeUtils.DifferenceBetweenDates(DateTime.Now, firstResult.DateOfBirth.GetValueOrDefault());
         firstResult.Name.ShouldBe("Fido");
         firstResult.Color.ShouldBe("White");
         firstResult.Species.ShouldBe("Dog");
