@@ -4,8 +4,8 @@ using ShelterBuddy.CodePuzzle.Api.Controllers;
 using ShelterBuddy.CodePuzzle.Api.Models;
 using ShelterBuddy.CodePuzzle.Core.DataAccess;
 using ShelterBuddy.CodePuzzle.Core.Entities;
+using ShelterBuddy.CodePuzzle.Utils;
 using Shouldly;
-using Utils;
 using Xunit;
 
 namespace ShelterBuddy.CodePuzzle.Api.Tests.Controllers;
@@ -57,8 +57,8 @@ public class AnimalControllerTests
         results.ShouldNotBeEmpty();
         results.Count().ShouldBe(2);
         var firstResult = results.Single(r => r.Id == "3bb2a7e5-979a-48df-9cc3-1bc1475917e3");
-        var (years, months, weeks) 
-            = DateTimeUtils.DateDiff(firstResult.DateOfBirth.GetValueOrDefault(), DateTime.Now);
+        var (years, months, weeks)
+            = DateTimeUtils.CompareDates(firstResult.DateOfBirth.GetValueOrDefault(), DateTime.Now);
         firstResult.Name.ShouldBe("Fido");
         firstResult.Color.ShouldBe("White");
         firstResult.Species.ShouldBe("Dog");
@@ -66,7 +66,7 @@ public class AnimalControllerTests
         firstResult.DateLost.ShouldBe(new DateTime(2019, 5, 23));
         firstResult.MicrochipNumber.ShouldBe("12345");
         firstResult.DateInShelter.ShouldBe(new DateTime(2019, 6, 4));
-        firstResult.DateOfBirth.ShouldBe(new DateTime(2017,3, 13));
+        firstResult.DateOfBirth.ShouldBe(new DateTime(2017, 3, 13));
         firstResult.AgeText.ShouldBe($"{years} years {months} months {weeks} weeks");
         firstResult.AgeYears.ShouldBeNull();
         firstResult.AgeMonths.ShouldBeNull();
