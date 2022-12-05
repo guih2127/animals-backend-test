@@ -30,5 +30,5 @@ dotnet run
 
 To access the actual API documentation, you can go to the swagger url:
 ```
-http://localhost:{yourlocalhostnumber}/swagger
+http://localhost:{yourlocalhostnumber}/swagger/index.html
 ```
