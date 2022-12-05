@@ -22,7 +22,7 @@ public class AnimalController : ControllerBase
     public IEnumerable<AnimalModel> GetAll()
     {
         var animals = _repository.GetAll();
-        return animals.Select(animal => AnimalMapping.MapEntityToModel(animal)).ToArray();
+        return animals.Select(animal => AnimalMapping.MapEntityToModel(animal));
     }
 
     [HttpPost]
